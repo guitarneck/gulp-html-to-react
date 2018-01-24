@@ -1,0 +1,29 @@
+{
+  "name": "gulp-html-to-react",
+  "version": "1.0.0",
+  "description": "Create a react component from HTML",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/guitarneck/gulp-html-to-react.git"
+  },
+  "keywords": [
+    "gulpplugin",
+    "gulp",
+    "react"
+  ],
+  "author": "Laurent STEFAN",
+  "license": "MIT",
+  "dependencies": {
+    "through2": "^2.0.3",
+    "gulp-util": "^3.0.8",
+    "camel-case": "^3.0.0",
+    "indent-string": "^3.2.0",
+    "htmltojsx": "^0.3.0"
+  },
+  "devDependencies": {
+  }
+}
