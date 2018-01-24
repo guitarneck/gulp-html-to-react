@@ -2,6 +2,8 @@
 
 A Gulp plugin to turn HTML into React component with embedded React code.
 
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url]
+
 ---
 
 > Based on [reactjs/react-magic](https://github.com/reactjs/react-magic).
@@ -74,3 +76,10 @@ list of valid options.
 ## License
 
 [MIT © guitarneck](./LICENSE)
+
+[downloads-image]: https://img.shields.io/npm/dm/gulp-html-to-react.svg
+[npm-image]: https://img.shields.io/npm/v/gulp-html-to-react.svg
+[npm-url]: https://www.npmjs.com/package/gulp-html-to-react
+
+[travis-image]: https://img.shields.io/travis/guitarneck/gulp-html-to-react.svg?label=travis-ci
+[travis-url]: https://travis-ci.org/guitarneck/gulp-html-to-react
