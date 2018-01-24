@@ -2,7 +2,7 @@
 
 A Gulp plugin to turn HTML into React component with embedded React code.
 
-[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url]
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url]
 
 ---
 
@@ -83,3 +83,6 @@ list of valid options.
 
 [travis-image]: https://img.shields.io/travis/guitarneck/gulp-html-to-react.svg?label=travis-ci
 [travis-url]: https://travis-ci.org/guitarneck/gulp-html-to-react
+
+[coveralls-image]: https://coveralls.io/repos/github/guitarneck/gulp-html-to-react/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/guitarneck/gulp-html-to-react?branch=master
