@@ -56,6 +56,8 @@ module.exports = function(gulp,config){
 };
 ```
 
+Used with stream or buffer. [gulp.src/options.buffer](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpsrcglobs-options)
+
 ## Options
 
 list of valid options.
