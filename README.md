@@ -1,6 +1,9 @@
 # gulp-html-to-react
+
 A Gulp plugin to turn HTML into React component with embedded React code.
+
 ---
+
 > Based on [reactjs/react-magic](https://github.com/reactjs/react-magic).
 
 ## Table of Contents
