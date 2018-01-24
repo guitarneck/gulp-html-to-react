@@ -25,5 +25,9 @@
     "htmltojsx": "^0.3.0"
   },
   "devDependencies": {
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/guitarneck/gulp-html-to-react/issues"
+  },
+  "homepage": "https://github.com/guitarneck/gulp-html-to-react"
 }
