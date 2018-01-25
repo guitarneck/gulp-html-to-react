@@ -58,7 +58,7 @@ module.exports = function(gulp,config){
 };
 ```
 
-Used with stream or buffer. [gulp.src/options.buffer](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpsrcglobs-options)
+Used with stream or buffer. See [gulp.src/options.buffer](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpsrcglobs-options)
 
 ## Options
 
