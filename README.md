@@ -84,5 +84,5 @@ list of valid options.
 [travis-image]: https://img.shields.io/travis/guitarneck/gulp-html-to-react.svg?label=travis-ci
 [travis-url]: https://travis-ci.org/guitarneck/gulp-html-to-react
 
-[coveralls-image]: https://coveralls.io/repos/github/guitarneck/gulp-html-to-react/badge.svg
-[coveralls-url]: https://coveralls.io/github/guitarneck/gulp-html-to-react
+[coveralls-image]: https://coveralls.io/repos/github/guitarneck/gulp-html-to-react/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/guitarneck/gulp-html-to-react?branch=master
