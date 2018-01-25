@@ -64,4 +64,6 @@ typings/
 .DS_Store
 
 # XCode workspace
-gulp-html-to-react.xcworkspace
+gulp-html-to-react.xcworkspace/
+gulp-html-to-react.xcworkspace/xcuserdata/
+UserInterfaceState.xcuserstate
