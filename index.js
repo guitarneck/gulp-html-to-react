@@ -8,7 +8,7 @@ var PluginError = require('gulp-util').PluginError,
 
     through     = require('through2'),
     HTMLtoJSX   = require('htmltojsx'),
-    
+
     pk          = require('./package.json');
 
 /*
@@ -70,11 +70,11 @@ module.exports = function ( opts )
 
     opts.style = Math.min(opts.style,tmpljsx.length - 1);
 
-	return through.obj(function (file ,enc ,cb)
+    return through.obj(function (file ,enc ,cb)
     {
         if ( file.isNull() ) return cb(null ,file);
 
-		try {
+        try {
             var converter = new HTMLtoJSX({createClass:false,indent:opts.indent});
 
             // for multi .ext
@@ -117,11 +117,11 @@ module.exports = function ( opts )
                 file.path = path.join(path.dirname(file.path),filename+opts.ext);
             }
             
-			this.push(file);
+            this.push(file);
 
-		} catch (err) {
-			this.emit('error',new PluginError(pk.name,err,{fileName:file.path}));
-		}
+        } catch (err) {
+            this.emit('error',new PluginError(pk.name,err,{fileName:file.path}));
+        }
         
         cb();
     });

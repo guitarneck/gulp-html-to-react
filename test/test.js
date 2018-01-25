@@ -55,13 +55,29 @@ function MockContext ( in_filename ,in_contents , out_filename ,out_contents )
 
 describe('gulp-html-to-react : filename' ,function(){
 
-	it('should change the .html extension to .jsx.js' ,function(done){
-		var options = {
+    it('should have the same extension' ,function(done){
+        var options = {
+            indent      : '\t',
+            encoding    : 'utf8',
+            style       : 0
+        };
+
+        var mock = new MockContext(
+            'toto.jsx.html',
+            '<div><?react this.props.something ?></div>',
+            'toto.jsx.html',
+            '<div>{ this.props.something }</div>'
+        );
+        mock.execute( options ,mock.methodFile ,done );
+    });
+
+    it('should change the .html extension to .jsx.js' ,function(done){
+        var options = {
             indent      : '\t',
             encoding    : 'utf8',
             ext         : '.jsx.js',
             style       : 0
-		};
+        };
 
         var mock = new MockContext(
             'toto.html',
@@ -70,15 +86,15 @@ describe('gulp-html-to-react : filename' ,function(){
             '<div>{ this.props.something }</div>'
         );
         mock.execute( options ,mock.methodFile ,done );
-	});
+    });
 
-	it('should create the .jsx.html extension to .jsx' ,function(done){
-		var options = {
+    it('should create the .jsx.html extension to .jsx' ,function(done){
+        var options = {
             indent      : '  ',
             encoding    : 'binary',
             ext         : '.jsx',
             style       : 2
-		};
+        };
 
         var mock = new MockContext(
             'toto.jsx.html',
@@ -92,19 +108,19 @@ describe('gulp-html-to-react : filename' ,function(){
              '      </div>;'].join('\n')
         );
         mock.execute( options ,mock.methodFile ,done );
-	});
+    });
 
 });
 
 describe('gulp-html-to-react : contents' ,function(){
 
-	it('should create a React.Component' ,function(done){
-		var options = {
+    it('should create a React.Component' ,function(done){
+        var options = {
             indent      : '\t',
             encoding    : 'utf8',
             ext         : '.jsx.js',
             style       : 0
-		};
+        };
 
         var mock = new MockContext(
             'toto.html',
@@ -125,15 +141,15 @@ describe('gulp-html-to-react : contents' ,function(){
              '};'].join('\n')
         );
         mock.execute( options ,mock.methodContent ,done );
-	});
+    });
 
-	it('should create a React.createClass' ,function(done){
-		var options = {
+    it('should create a React.createClass' ,function(done){
+        var options = {
             indent      : '  ',
             encoding    : 'utf8',
             ext         : '.jsx.js',
             style       : 1
-		};
+        };
 
         var mock = new MockContext(
             'toto.jsx.html',
@@ -149,15 +165,15 @@ describe('gulp-html-to-react : contents' ,function(){
              '});'].join('\n')
         );
         mock.execute( options ,mock.methodContent ,done );
-	});
+    });
 
-	it('should create a var component' ,function(done){
-		var options = {
+    it('should create a var component' ,function(done){
+        var options = {
             indent      : '  ',
             encoding    : 'binary',
             ext         : '.jsx',
             style       : 2
-		};
+        };
 
         var mock = new MockContext(
             'toto.jsx.html',
@@ -171,15 +187,15 @@ describe('gulp-html-to-react : contents' ,function(){
              '      </div>;'].join('\n')
         );
         mock.execute( options ,mock.methodContent ,done );
-	});
+    });
 
-	it('should create a createReactClass' ,function(done){
-		var options = {
+    it('should create a createReactClass' ,function(done){
+        var options = {
             indent      : '  ',
             encoding    : 'ascii',
             ext         : '.jsx.js',
             style       : 3
-		};
+        };
 
         var mock = new MockContext(
             'toto.jsx.html',
@@ -199,6 +215,6 @@ describe('gulp-html-to-react : contents' ,function(){
              '});'].join('\n')
         );
         mock.execute( options ,mock.methodContent ,done );
-	});
+    });
 
 });
