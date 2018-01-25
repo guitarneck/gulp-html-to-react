@@ -63,7 +63,27 @@ typings/
 # Mac Desktop Services Store file system
 .DS_Store
 
-# XCode workspace
+# XCode workspace excluding
 gulp-html-to-react.xcworkspace/
 gulp-html-to-react.xcworkspace/xcuserdata/
 UserInterfaceState.xcuserstate
+
+###########################
+# FIXING an existing XCODE repo
+# _WHILE THE PROJECT IS CLOSED_...
+# fix your gitignore file to exclude things you don't want to track in future
+# then
+# git rm --cached on each of the files in the repo that you need to remove from tracking
+# single file...
+# > git rm --cached ./test.xcodeproj/project.xcworkspace/xcuserdata/user.xcuserdatad/UserInterfaceState.xcuserstate 
+# all files in a directory...
+# > git rm --cached ./test.xcodeproj/project.xcworkspace/xcuserdata/user.xcuserdatad/*
+# recursive directories...
+# > git rm -r --cached ./test.xcodeproj/project.xcworkspace/xcuserdata/
+#
+# then git commit -m "cleaned repo" 
+#
+# (this is important - XCode will ignore your new exclusions 
+# if you do not make a commandline commit before using XCode again)
+#
+# now you can use your project in XCode
