@@ -4,7 +4,9 @@
   "description": "Create a react component from HTML",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "cover": "istanbul cover _mocha --report lcovonly",
+    "coveralls": "npm run-script test && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,8 @@
     "through2": "^2.0.3"
   },
   "devDependencies": {
+    "coveralls": "^3.0.0",
+    "istanbul": "^0.4.5",
     "mocha": "^5.0.0",
     "should": "^13.2.1"
   },
