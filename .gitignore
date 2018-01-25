@@ -62,3 +62,6 @@ typings/
 
 # Mac Desktop Services Store file system
 .DS_Store
+
+# XCode workspace
+*.xcworkspace
