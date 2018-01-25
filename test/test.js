@@ -45,15 +45,66 @@ function MockContext ( in_filename ,in_contents , out_filename ,out_contents )
         file.path.should.equal(MOCKPATH + "/" + this.out.filename);
         file.relative.should.equal(this.out.filename);
     }
-    
+
     this.methodContent = function ( file ,options )
     {
         file.contents.toString().should.equal(this.out.contents.toString(options.encoding));
     }
 };
 
+describe('gulp-html-to-react : options' ,function(){
 
-describe('gulp-html-to-react : filename' ,function(){
+    it('should have the defaut options when undefined' ,function(done){
+        var mock = new MockContext(
+            'toto.jsx.html',
+            '<div><?react this.props.something ?></div>',
+            'toto.jsx.html',
+            '<div>{ this.props.something }</div>'
+        );
+        mock.execute( undefined ,mock.methodFile ,done );
+    });
+
+    it('should have the defaut options' ,function(done){
+        var options = {
+        };
+
+        var mock = new MockContext(
+            'toto.jsx.html',
+            '<div><?react this.props.something ?></div>',
+            'toto.jsx.html',
+            '<div>{ this.props.something }</div>'
+        );
+        mock.execute( options ,mock.methodFile ,done );
+    });
+
+    it('should have the defaut indent' ,function(done){
+        var options = {
+            style       : 0
+        };
+
+        var mock = new MockContext(
+            'toto.jsx.html',
+            '<div><?react this.props.something ?></div>',
+            'toto.jsx.html',
+            '<div>{ this.props.something }</div>'
+        );
+        mock.execute( options ,mock.methodFile ,done );
+    });
+
+    it('should have the defaut encoding' ,function(done){
+        var options = {
+            indent      : '\t',
+            style       : 0
+        };
+
+        var mock = new MockContext(
+            'toto.jsx.html',
+            '<div><?react this.props.something ?></div>',
+            'toto.jsx.html',
+            '<div>{ this.props.something }</div>'
+        );
+        mock.execute( options ,mock.methodFile ,done );
+    });
 
     it('should have the same extension' ,function(done){
         var options = {
@@ -70,6 +121,9 @@ describe('gulp-html-to-react : filename' ,function(){
         );
         mock.execute( options ,mock.methodFile ,done );
     });
+});
+
+describe('gulp-html-to-react : filename' ,function(){
 
     it('should change the .html extension to .jsx.js' ,function(done){
         var options = {
