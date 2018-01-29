@@ -84,8 +84,8 @@ list of valid options.
 [travis-image]: https://img.shields.io/travis/guitarneck/gulp-html-to-react.svg?label=travis-ci
 [travis-url]: https://travis-ci.org/guitarneck/gulp-html-to-react
 
-[coveralls-image]: https://coveralls.io/repos/github/guitarneck/gulp-html-to-react/badge.svg?649820&branch=master
-[coveralls-url]: https://coveralls.io/github/guitarneck/gulp-html-to-react?649820&branch=master
+[coveralls-image]: https://coveralls.io/repos/github/guitarneck/gulp-html-to-react/badge.svg?<%= forceCache %>&branch=master
+[coveralls-url]: https://coveralls.io/github/guitarneck/gulp-html-to-react?branch=master
 
 [dev-dependencies-image]: https://david-dm.org/guitarneck/gulp-html-to-react/dev-status.svg
 [dev-dependencies-url]: https://david-dm.org/guitarneck/gulp-html-to-react?type=dev
