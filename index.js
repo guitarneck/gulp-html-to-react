@@ -42,12 +42,12 @@ const tmpljsx =
         '\n%0%0);\n%0}\n});'
     ]
 ];
-
+/*
 function capitalize (s)
 {
     return s.replace(/(?:^|\s)\S/g, function(a){return a.toUpperCase()});
 }
-
+*/
 function ucfirst (s)
 {
 // .replace(/./,function(c){return c.toUpperCase()})
@@ -90,7 +90,10 @@ module.exports = function ( opts )
             var footer = (tmpljsx[opts.style][1]).replace(/%0/g,opts.indent).replace(/%1/,cameled);
 
             if ( file.isStream() )
-            {                
+            {
+            
+            console.log('File is stream ****');
+            
                 var streamer = through(function (stringData ,enc ,cb){
                     var jsxed = (converter.convert(stringData.toString(opts.encoding))).trim();
                     var datas = indent(jsxed,3,{indent:opts.indent});

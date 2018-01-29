@@ -1,24 +1,61 @@
 var gutil       = require('gulp-util'),
-    assert      = require('assert'),
     should      = require('should');
 
 var HTML2React  = require('../index');
 
 var MOCKPATH = "tmp";
 
-function MockContext ( in_filename ,in_contents , out_filename ,out_contents )
+/*===*/
+function streamToBuffer(stream)
+{
+    return new Promise(function(resolve, reject) {
+        var buffers = [];
+        stream.on('error', reject);
+        stream.on('data', function(data){ buffers.push(data) });
+        stream.on('end', function(){ resolve(Buffer.concat(buffers)) });
+    });
+}
+
+var Duplex = require('stream').Duplex || require('readable-stream').Duplex;
+function bufferToStream(buffer)
+{
+    var stream = new Duplex();
+    stream.push(buffer);
+    stream.push(null);
+    return stream;
+}
+/*===*/
+
+
+function MockHTML2React ( in_filename ,in_contents , out_filename ,out_contents ,buffer )
 {
     this.in     = {filename:in_filename ,contents:in_contents};
     this.out    = {filename:out_filename,contents:out_contents};
 
+    this._mode   = (typeof buffer === 'undefined') ? 'b' : (buffer ? 'b' : 's');
+
+    this.buffer = function (boolean) { this._mode = boolean ? 'b' : 's' }
+    this.isBuffer = function () { return this._mode === 'b' }
+    this.isStream = function () { return this._mode === 's' }
+
     this.createFile = function ()
     {
-        return new gutil.File({
+        var opts = {
             path        : MOCKPATH + "/" + this.in.filename,
             base        : MOCKPATH,
             cwd         : "test/",
-            contents    : new Buffer( this.in.contents )
-        })
+        }
+
+        if ( this.isBuffer() )
+        {
+            opts.contents = this.in.contents !== null ? new Buffer( this.in.contents ) : null
+        }
+        else
+        {
+            opts.contents = bufferToStream( this.in.contents !== null ? new Buffer( this.in.contents ) : null )
+        }
+
+        return new gutil.File(opts)
     }
 
     this.execute = function ( options ,method ,done )
@@ -27,16 +64,40 @@ function MockContext ( in_filename ,in_contents , out_filename ,out_contents )
         
         var that = this;
 
-        var stream  = HTML2React( options );
+        var streamz  = HTML2React( options );
 
-            stream.on('error' ,done);
+            streamz.on('error' ,done);
 
-            stream.on('data' ,function( file ){
-                method.call( that ,file ,options );
-                done();
+
+            if ( ! this.isStream() )
+            {
+                streamz.on('data' ,function( file ){
+                    method.call( that ,file ,options );
+                    done();
+                });
+                streamz.write( file );
+            }
+            else
+            {
+                streamz.on('data' ,function( file ){
+                    streamToBuffer(file.contents).then(function(){
+                        method.call( that ,file ,options );
+                    })
+                    done();
+                });
+                streamz.write( file );
+            }
+/***
+            var converter = new stream.Writable();
+            converter.data = []; // We'll store all the data inside this array
+            converter._write = function (chunk) {
+                this.data.push(chunk);
+            };
+            converter.on('end', function() { // Will be emitted when the input stream has ended, ie. no more data will be provided
+                var b = Buffer.concat(this.data); // Create a buffer from all the received chunks
+                // Insert your business logic here
             });
-
-            stream.write( file );
+***/
     };
 
     this.methodFile = function ( file ,options )
@@ -50,12 +111,18 @@ function MockContext ( in_filename ,in_contents , out_filename ,out_contents )
     {
         file.contents.toString().should.equal(this.out.contents.toString(options.encoding));
     }
+
+    this.methodNull = function ( file ,options )
+    {
+        should.exist(file);
+        file.isNull().should.equal(true);
+    }
 };
 
 describe('gulp-html-to-react : options' ,function(){
 
     it('should have the defaut options when undefined' ,function(done){
-        var mock = new MockContext(
+        var mock = new MockHTML2React(
             'toto.jsx.html',
             '<div><?react this.props.something ?></div>',
             'toto.jsx.html',
@@ -68,7 +135,7 @@ describe('gulp-html-to-react : options' ,function(){
         var options = {
         };
 
-        var mock = new MockContext(
+        var mock = new MockHTML2React(
             'toto.jsx.html',
             '<div><?react this.props.something ?></div>',
             'toto.jsx.html',
@@ -82,7 +149,7 @@ describe('gulp-html-to-react : options' ,function(){
             style       : 0
         };
 
-        var mock = new MockContext(
+        var mock = new MockHTML2React(
             'toto.jsx.html',
             '<div><?react this.props.something ?></div>',
             'toto.jsx.html',
@@ -97,7 +164,7 @@ describe('gulp-html-to-react : options' ,function(){
             style       : 0
         };
 
-        var mock = new MockContext(
+        var mock = new MockHTML2React(
             'toto.jsx.html',
             '<div><?react this.props.something ?></div>',
             'toto.jsx.html',
@@ -113,7 +180,7 @@ describe('gulp-html-to-react : options' ,function(){
             style       : 0
         };
 
-        var mock = new MockContext(
+        var mock = new MockHTML2React(
             'toto.jsx.html',
             '<div><?react this.props.something ?></div>',
             'toto.jsx.html',
@@ -133,7 +200,7 @@ describe('gulp-html-to-react : filename' ,function(){
             style       : 0
         };
 
-        var mock = new MockContext(
+        var mock = new MockHTML2React(
             'toto.html',
             '<div><?react this.props.something ?></div>',
             'toto.jsx.js',
@@ -150,7 +217,7 @@ describe('gulp-html-to-react : filename' ,function(){
             style       : 2
         };
 
-        var mock = new MockContext(
+        var mock = new MockHTML2React(
             'toto.jsx.html',
             ['<div class="ccs1 ccs2">',
             '    <?REACT this.props.something ?>',
@@ -168,6 +235,46 @@ describe('gulp-html-to-react : filename' ,function(){
 
 describe('gulp-html-to-react : contents' ,function(){
 
+    it('should do nothing when a file is null' ,function(done){
+        var mock = new MockHTML2React(
+            'toto.html',
+            null,
+            'toto.jsx.js',
+            null
+        );
+        mock.execute( undefined ,mock.methodNull ,done );
+    });
+
+    it('should create a stream for React.Component' ,function(done){
+        var options = {
+            indent      : '\t',
+            encoding    : 'utf8',
+            ext         : '.jsx.js',
+            style       : 0
+        };
+
+        var mock = new MockHTML2React(
+            'toto.html',
+            '<div><?REACT this.props.something ?></div>',
+            'toto.jsx.js',
+            ['class Toto extends React.Component',
+             '{',
+             '\tconstructor (props)',
+             '\t{',
+             '\t\tsuper(props);',
+             '\t}',
+             '\trender ()',
+             '\t{',
+             '\t\treturn (',
+             '\t\t\t<div>{this.props.something}</div>',
+             '\t\t);',
+             '\t}',
+             '};'].join('\n')
+        );
+        mock.buffer( false );
+        mock.execute( options ,mock.methodContent ,done );
+    });
+
     it('should create a React.Component' ,function(done){
         var options = {
             indent      : '\t',
@@ -176,7 +283,7 @@ describe('gulp-html-to-react : contents' ,function(){
             style       : 0
         };
 
-        var mock = new MockContext(
+        var mock = new MockHTML2React(
             'toto.html',
             '<div><?REACT this.props.something ?></div>',
             'toto.jsx.js',
@@ -205,7 +312,7 @@ describe('gulp-html-to-react : contents' ,function(){
             style       : 1
         };
 
-        var mock = new MockContext(
+        var mock = new MockHTML2React(
             'toto.jsx.html',
             '<div><?REACT this.props.something ?></div>',
             'toto.jsx.js',
@@ -229,7 +336,7 @@ describe('gulp-html-to-react : contents' ,function(){
             style       : 2
         };
 
-        var mock = new MockContext(
+        var mock = new MockHTML2React(
             'toto.jsx.html',
             ['<div class="ccs1 ccs2">',
             '    <?REACT this.props.something ?>',
@@ -251,7 +358,7 @@ describe('gulp-html-to-react : contents' ,function(){
             style       : 3
         };
 
-        var mock = new MockContext(
+        var mock = new MockHTML2React(
             'toto.jsx.html',
             ['<div onclick="<?REACT() => alert(\'click\')?>">',
             '    <?REACT this.props.something ?>',
