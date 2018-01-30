@@ -10,30 +10,22 @@ A Gulp plugin to turn HTML into React component with embedded React code.
 
 ## Table of Contents
 
-* [Embendding React code in HTML](#embedding-react-code-in-html)
+* [Install](#install)
 * [Usage](#usage)
+* [Embendding React code in HTML](#embedding-react-code-in-html)
 * [Options](#options)
 * [License](#license)
 
-## Embedding React code in HTML
+## Install
 
-A special tag can be used to write React code embedded in an HTML document.
-
-```html
-<?REACT...?>
+```
+$ npm i -D gulp-html-to-react
 ```
 
-**Example:**
-```html
-<button class="square" onclick="<?REACT() => alert('click')?>">
-    <?REACTthis.props.value?>
-</button>
+Or:
+
 ```
-**Giving:**
-```html
-<button className="square" onclick={() => alert('click')}>
-    {this.props.value}
-</button>
+$ npm install --save-dev gulp-html-to-react
 ```
 
 ## Usage
@@ -60,14 +52,54 @@ module.exports = function(gulp,config){
 
 Used with stream or buffer. See [gulp.src/options.buffer](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpsrcglobs-options)
 
+## Embedding React code in HTML
+
+A special tag can be used to write React code embedded in an HTML document.
+
+```html
+<?REACT...?>
+```
+
+**Example:**
+```html
+<button class="square" onclick="<?REACT() => alert('click')?>">
+    <?REACTthis.props.value?>
+</button>
+```
+**Giving:**
+```html
+<button className="square" onclick={() => alert('click')}>
+    {this.props.value}
+</button>
+```
+
 ## Options
 
-list of valid options.
+### indent
 
-- `indent`: String to be used as indent for the component. (Default: '\t').
-- `encoding`: String to encode the output. (Default: 'utf8').
-- `ext`: String to be used as extension for the output file. (Default: null).
-- `style`: Integer for the style used to create the component. (Default: 0).
+Type: `string` Default value: `\t`
+
+Character(s) to be used for indenting the component.
+
+### encoding
+
+Type: `string` Default value: `utf8`
+
+Type of the encoding for the output.
+
+### ext
+
+Type: `string` Default value: `null`
+
+The extension for the output file. When `null`, the extension remain the same as the input file.
+
+### style
+
+Type: `integer` Default value: `0`
+
+The style to be used to create the component.
+
+Values:
   * `0`: React.Component (~ v16.2.0)
   * `1`: React.createClass (~ v15.6.2)
   * `2`: var
@@ -84,7 +116,7 @@ list of valid options.
 [travis-image]: https://img.shields.io/travis/guitarneck/gulp-html-to-react.svg?label=travis-ci
 [travis-url]: https://travis-ci.org/guitarneck/gulp-html-to-react
 
-[coveralls-image]: https://coveralls.io/repos/github/guitarneck/gulp-html-to-react/badge.svg?978604&branch=master
+[coveralls-image]: https://coveralls.io/repos/github/guitarneck/gulp-html-to-react/badge.svg?660388&branch=master
 [coveralls-url]: https://coveralls.io/github/guitarneck/gulp-html-to-react?branch=master
 
 [dev-dependencies-image]: https://david-dm.org/guitarneck/gulp-html-to-react/dev-status.svg
