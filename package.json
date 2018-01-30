@@ -1,6 +1,6 @@
 {
   "name": "gulp-html-to-react",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Create a react component from HTML",
   "main": "index.js",
   "scripts": {
