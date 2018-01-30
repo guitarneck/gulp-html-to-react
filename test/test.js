@@ -68,7 +68,6 @@ function MockHTML2React ( in_filename ,in_contents , out_filename ,out_contents 
 
             streamz.on('error' ,done);
 
-
             if ( ! this.isStream() )
             {
                 streamz.on('data' ,function( file ){
@@ -233,19 +232,9 @@ describe('gulp-html-to-react : filename' ,function(){
 
 });
 
-describe('gulp-html-to-react : contents' ,function(){
+describe('gulp-html-to-react : contents from a stream' ,function(){
 
-    it('should do nothing when a file is null' ,function(done){
-        var mock = new MockHTML2React(
-            'toto.html',
-            null,
-            'toto.jsx.js',
-            null
-        );
-        mock.execute( undefined ,mock.methodNull ,done );
-    });
-
-    it('should create a stream for React.Component' ,function(done){
+    it('should create for React.Component' ,function(done){
         var options = {
             indent      : '\t',
             encoding    : 'utf8',
@@ -273,6 +262,20 @@ describe('gulp-html-to-react : contents' ,function(){
         );
         mock.buffer( false );
         mock.execute( options ,mock.methodContent ,done );
+    });
+
+});
+
+describe('gulp-html-to-react : contents from a buffer' ,function(){
+
+    it('should do nothing when a file is null' ,function(done){
+        var mock = new MockHTML2React(
+            'toto.html',
+            null,
+            'toto.jsx.js',
+            null
+        );
+        mock.execute( undefined ,mock.methodNull ,done );
     });
 
     it('should create a React.Component' ,function(done){

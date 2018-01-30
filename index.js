@@ -11,13 +11,6 @@ var PluginError = require('gulp-util').PluginError,
 
     pk          = require('./package.json');
 
-/*
-constructor (props)
-{
-    super(props);
-}
-*/
-
 var cons = '\n%0constructor (props)\n%0{\n%0%0super(props);\n%0}';
 
 const tmpljsx =
@@ -42,21 +35,14 @@ const tmpljsx =
         '\n%0%0);\n%0}\n});'
     ]
 ];
-/*
-function capitalize (s)
-{
-    return s.replace(/(?:^|\s)\S/g, function(a){return a.toUpperCase()});
-}
-*/
+
 function ucfirst (s)
 {
-// .replace(/./,function(c){return c.toUpperCase()})
     return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 function reactTags (s)
 {
-    //return s.replace(/\{\/\*\?REACT\s*(.+?)\s*\?\*\/\}/gi,'{$1}').replace(/"<\?REACT\s*(.+?)\s*\?>"/gi,'{$1}');
     return s.replace(/\{\/\*\?REACT\s*([\s\S]+?)\s*\?\*\/\}/gi,'{$1}').replace(/"<\?REACT\s*([\s\S]+?)\s*\?>"/gi,'{$1}');
 }
 
@@ -65,67 +51,60 @@ module.exports = function ( opts )
     opts = opts || {};
     opts.indent     = opts.indent || '\t';
     opts.encoding   = opts.encoding || 'utf8';
-    opts.ext        = opts.ext || null; //'.jsx'; 
+    opts.ext        = opts.ext || null;
     opts.style      = opts.style || 0;
 
     opts.style = Math.min(opts.style,tmpljsx.length - 1);
 
+    var converter = new HTMLtoJSX({createClass:false,indent:opts.indent});
+
+    function createContents ( header ,fileContents ,footer )
+    {
+        var jsxed = (converter.convert(fileContents.toString(opts.encoding))).trim();
+        var datas = indent(jsxed,3,{indent:opts.indent});
+            datas = reactTags(datas);
+        return new Buffer(header+datas+footer,opts.encoding);
+    }
+
     return through.obj(function (file ,enc ,cb)
     {
-        if ( file.isNull() ) return cb(null ,file);
+        if ( ! file.isNull() )
+        {
+            try {
+                // for multi .ext
+                var filename = path.basename(file.path) ,e='' ,ext='';
+                while ( (e = path.extname(filename)) !== '' )
+                {
+                    filename = path.basename(filename ,e);
+                    ext = e + ext;
+                }
 
-        try {
-            var converter = new HTMLtoJSX({createClass:false,indent:opts.indent});
+                var cameled = ucfirst(camelcase(filename));
+                var header = (tmpljsx[opts.style][0]).replace(/%0/g,opts.indent).replace(/%1/,cameled);
+                var footer = (tmpljsx[opts.style][1]).replace(/%0/g,opts.indent).replace(/%1/,cameled);
 
-            // for multi .ext
-            var filename = path.basename(file.path) ,e='' ,ext='';
-            while ( (e = path.extname(filename)) !== '' )
-            {
-                filename = path.basename(filename ,e);
-                ext = e + ext;
+                if ( file.isStream() )
+                {
+                    var streamer = through(function (fileContents ,enc ,cb){
+                        cb(null,createContents(header,fileContents,footer));
+                    });
+                    streamer.on('error',function(err){ cb(err); });
+                    file.contents = file.contents.pipe(streamer);
+                }
+            
+                if ( file.isBuffer() )
+                {
+                    file.contents = createContents(header,file.contents,footer)
+                }
+            
+                if ( opts.ext !== null )
+                {
+                    file.path = path.join(path.dirname(file.path),filename+opts.ext);
+                }
+            } catch (err) {
+                cb(new PluginError(pk.name,err,{fileName:file.path}));
             }
-
-            var cameled = ucfirst(camelcase(filename));
-            var header = (tmpljsx[opts.style][0]).replace(/%0/g,opts.indent).replace(/%1/,cameled);
-            var footer = (tmpljsx[opts.style][1]).replace(/%0/g,opts.indent).replace(/%1/,cameled);
-
-            if ( file.isStream() )
-            {
-            
-            console.log('File is stream ****');
-            
-                var streamer = through(function (stringData ,enc ,cb){
-                    var jsxed = (converter.convert(stringData.toString(opts.encoding))).trim();
-                    var datas = indent(jsxed,3,{indent:opts.indent});
-                        datas = reactTags(datas);
-                    cb(null, new Buffer(header+datas+footer,opts.encoding));
-                });
-                streamer.on('error',function(err){
-                    this.emit('end');
-                });
-                
-                file.contents = file.contents.pipe(streamer);
-            }
-            
-            if ( file.isBuffer() )
-            {
-                var jsxed = (converter.convert(file.contents.toString(opts.encoding))).trim();
-                var datas = indent(jsxed,3,{indent:opts.indent});
-                    datas = reactTags(datas);
-                file.contents = new Buffer(header+datas+footer,opts.encoding);
-            }
-            
-            if ( opts.ext !== null )
-            {
-                file.path = path.join(path.dirname(file.path),filename+opts.ext);
-            }
-            
-            this.push(file);
-
-        } catch (err) {
-            this.emit('error',new PluginError(pk.name,err,{fileName:file.path}));
         }
-        
-        cb();
+        cb(null,file);
     });
 };
