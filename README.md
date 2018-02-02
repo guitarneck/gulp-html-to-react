@@ -1,8 +1,8 @@
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![dependencies][dependencies-image]][dependencies-url] [![dev dependencies][dev-dependencies-image]][dev-dependencies-url]
+
 # gulp-html-to-react
 
 A Gulp plugin to turn HTML into React component with embedded React code.
-
-[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![dependencies][dependencies-image]][dependencies-url] [![dev dependencies][dev-dependencies-image]][dev-dependencies-url]
 
 ---
 
@@ -116,7 +116,7 @@ Values:
 [travis-image]: https://img.shields.io/travis/guitarneck/gulp-html-to-react.svg?label=travis-ci
 [travis-url]: https://travis-ci.org/guitarneck/gulp-html-to-react
 
-[coveralls-image]: https://coveralls.io/repos/github/guitarneck/gulp-html-to-react/badge.svg?660388&branch=master
+[coveralls-image]: https://coveralls.io/repos/github/guitarneck/gulp-html-to-react/badge.svg?533754&branch=master
 [coveralls-url]: https://coveralls.io/github/guitarneck/gulp-html-to-react?branch=master
 
 [dev-dependencies-image]: https://david-dm.org/guitarneck/gulp-html-to-react/dev-status.svg

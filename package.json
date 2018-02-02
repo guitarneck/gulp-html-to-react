@@ -7,7 +7,8 @@
     "test": "mocha",
     "cover-local": "istanbul cover _mocha",
     "cover": "istanbul cover _mocha --report lcovonly",
-    "coveralls": "npm run-script cover && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
+    "coveralls": "npm run-script cover && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
+    "release": "npm version $1 && npm publish && git push $2 $3 && nsrun coveralls"
   },
   "repository": {
     "type": "git",
@@ -16,7 +17,8 @@
   "keywords": [
     "gulpplugin",
     "gulp",
-    "react"
+    "react",
+    "component"
   ],
   "author": "Laurent STEFAN",
   "license": "MIT",
